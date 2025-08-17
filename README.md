@@ -1,34 +1,34 @@
-Meet App
+**Meet App**
 
 A Progressive Web Application (PWA) built with React that allows users to view, filter, and interact with events. The app supports offline usage, installability, and visual insights via charts.
 
 User Stories
-Feature 1: Filter events by city
+**Feature 1: Filter events by city**
 
 As a busy user, I want to filter events by a chosen city so that I see relevant events.
 
-Feature 2: Expand and collapse event details
+**Feature 2: Expand and collapse event details**
 
 As a curious user, I want to expand an event to see details so that I can learn more without leaving the list.
 
-Feature 3: Control number of visible events
+**Feature 3: Control number of visible events**
 
 As a user managing limited screen space, I want to set how many events are displayed so that I can avoid excessive scrolling.
 
-Feature 4: Offline usage
+**Feature 4: Offline usage**
 
 As a traveler with unreliable internet, I want the app to work offline so that I can still access the UI and cached events.
 
-Feature 5: Install PWA to device
+**Feature 5: Install PWA to device**
 
 As a mobile-first user, I want to install the app so that I can launch it like a native app.
 
-Feature 6: View event charts
+**Feature 6: View event charts**
 
 As a data-oriented user, I want to view charts summarizing events so that I can spot trends quickly.
 
-Gherkin Scenarios
-Feature: Filter events by city
+**Gherkin Scenarios**
+**Feature: Filter events by city**
 
 Scenario: Show suggestions as the user types
 Given the events list page is open
@@ -46,7 +46,7 @@ Given a city filter is active
 When the user clears the city field
 Then the events list shows events from all available cities
 
-Feature: Expand and collapse event details
+**Feature: Expand and collapse event details**
 
 Scenario: Collapse details by default
 Given the events list is displayed
@@ -63,7 +63,7 @@ Given details are visible for an event
 When the user clicks "Hide details"
 Then the event details collapse
 
-Feature: Control number of visible events
+**Feature: Control number of visible events**
 
 Scenario: Default number of events
 Given the app loads for the first time
@@ -79,7 +79,7 @@ Given the user enters a non-numeric or negative value
 When the value is submitted
 Then the app shows a validation message and keeps the previous valid count
 
-Feature: Offline usage
+**Feature: Offline usage**
 
 Scenario: Load app shell offline
 Given the user has installed or previously visited the app
@@ -99,7 +99,7 @@ And the device regains connectivity
 When the app detects connection restored
 Then the app syncs and refreshes the events list
 
-Feature: Install PWA to device
+**Feature: Install PWA to device**
 
 Scenario: See install prompt when eligible
 Given the app meets PWA installability criteria
@@ -117,7 +117,7 @@ Given the app is installed
 When the user opens it from the home screen
 Then it opens in standalone/fullscreen display mode
 
-Feature: View event charts
+**Feature: View event charts**
 
 Scenario: Events by city chart
 Given there are events across multiple cities
@@ -134,12 +134,12 @@ Given the user has filtered by "Berlin, DE"
 When the user opens the charts view
 Then the charts reflect only Berlin events
 
-Deployment
+**Deployment**
 
 This app is deployed using Vercel.
 Visit the deployed version here: Live App Link (replace # with your actual Vercel URL).
 
-Installation
+**Installation**
 
 Clone the repository:
 git clone https://github.com/your-username/meet-app.git
@@ -151,7 +151,7 @@ npm install
 Start the development server:
 npm start
 
-Tech Stack
+**Tech Stack**
 
 React.js – Frontend framework
 
