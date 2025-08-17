@@ -161,10 +161,12 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
     Then the charts reflect only Berlin events
 
 **Deployment**
+
 This app is deployed using Vercel.
 Visit the deployed version here: Live App Link (replace # with your actual Vercel URL).
 
 **Installation**
+
 Clone the repository:
 git clone https://github.com/your-username/meet-app.git
 cd meet-app
@@ -176,6 +178,7 @@ Start the development server:
 npm start
 
 **Tech Stack**
+
 React.js – Frontend framework
 
 Jest / Cucumber.js – Testing framework
