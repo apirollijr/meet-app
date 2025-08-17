@@ -35,18 +35,18 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
   I want to filter events by a chosen city
   So that I see relevant events
 
-  Scenario: Show suggestions as the user types
+  **Scenario:** Show suggestions as the user types
     Given the events list page is open
     And the city search input is focused
     When the user types "Ber"
     Then a list of city suggestions matching "Ber" should appear
 
-  Scenario: Select a city from suggestions
+  **Scenario:** Select a city from suggestions
     Given the user sees city suggestions
     When the user clicks "Berlin, DE"
     Then the events list updates to show events in "Berlin, DE"
 
-  Scenario: Clear filter to see all cities
+  **Scenario:** Clear filter to see all cities
     Given a city filter is active
     When the user clears the city field
     Then the events list shows events from all available cities
@@ -58,17 +58,17 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
   I want to expand an event to see details
   So that I can learn more without leaving the list
 
-  Scenario: Collapse details by default
+  **Scenario:** Collapse details by default
     Given the events list is displayed
     Then each event card shows only summary info
     And details are hidden
 
-  Scenario: Expand details for one event
+  **Scenario:** Expand details for one event
     Given details are hidden for an event
     When the user clicks "Show details"
     Then the event reveals location, description, start/end time, and link
 
-  Scenario: Collapse details again
+  **Scenario:** Collapse details again
     Given details are visible for an event
     When the user clicks "Hide details"
     Then the event details collapse
@@ -80,16 +80,16 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
   I want to set how many events are displayed
   So that I can avoid excessive scrolling
 
-  Scenario: Default number of events
+  **Scenario:** Default number of events
     Given the app loads for the first time
     Then the list shows a default number of events (e.g., 32)
 
-  Scenario: Change number of visible events
+  **Scenario:** Change number of visible events
     Given the events list is displayed
     When the user sets "Number of events" to 10
     Then only 10 events should be shown in the list
 
-  Scenario: Handle invalid input
+  **Scenario:** Handle invalid input
     Given the user enters a non-numeric or negative value
     When the value is submitted
     Then the app shows a validation message and keeps the previous valid count
@@ -101,19 +101,19 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
   I want the app to work offline
   So that I can still access the UI and cached events
 
-  Scenario: Load app shell offline
+  **Scenario:** Load app shell offline
     Given the user has installed or previously visited the app
     And the device is offline
     When the user opens the app
     Then the app shell (HTML/CSS/JS) loads from cache
 
-  Scenario: View cached events offline
+  **Scenario:** View cached events offline
     Given the user previously fetched events while online
     And the device is offline
     When the user opens the events list
     Then the app displays the last cached events with an offline indicator
 
-  Scenario: Show sync indicator when back online
+  **Scenario:** Show sync indicator when back online
     Given the app is open with cached data
     And the device regains connectivity
     When the app detects connection restored
@@ -124,18 +124,18 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
   I want to install the app
   So that I can launch it like a native app
 
-  Scenario: See install prompt when eligible
+  **Scenario:** See install prompt when eligible
     Given the app meets PWA installability criteria
     When the browser fires the beforeinstallprompt event
     Then the app shows an "Install" affordance to the user
 
-  Scenario: Install the app
+  **Scenario:** Install the app
     Given the user clicks the "Install" button
     When the browser install dialog appears
     Then the user can confirm install
     And the app icon is added to the home screen
 
-  Scenario: Launch installed app
+  **Scenario:** Launch installed app
     Given the app is installed
     When the user opens it from the home screen
     Then it opens in standalone/fullscreen display mode
@@ -145,17 +145,17 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
   I want to view charts summarizing events
   So that I can spot trends quickly
 
-  Scenario: Events by city chart
+  **Scenario:** Events by city chart
     Given there are events across multiple cities
     When the user navigates to the "Insights" or "Charts" view
     Then a chart displays the number of events per city
 
-  Scenario: Topic/keyword distribution chart
+  **Scenario:** Topic/keyword distribution chart
     Given event data includes titles/descriptions
     When the chart view loads
     Then a chart summarizes frequency of top topics/keywords
 
-  Scenario: Chart updates with filters
+  **Scenario:** Chart updates with filters
     Given the user has filtered by "Berlin, DE"
     When the user opens the charts view
     Then the charts reflect only Berlin events
@@ -164,7 +164,7 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
 This app is deployed using Vercel.
 Visit the deployed version here: Live App Link (replace # with your actual Vercel URL).
 
-Installation
+**Installation**
 Clone the repository:
 git clone https://github.com/your-username/meet-app.git
 cd meet-app
@@ -175,7 +175,7 @@ npm install
 Start the development server:
 npm start
 
-Tech Stack
+**Tech Stack**
 React.js – Frontend framework
 
 Jest / Cucumber.js – Testing framework
