@@ -163,12 +163,12 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
 **Deployment**
 
 This app is deployed using Vercel.
-Visit the deployed version here: Live App Link (replace # with your actual Vercel URL).
+Visit the deployed version here:
 
 **Installation**
 
 Clone the repository:
-git clone https://github.com/your-username/meet-app.git
+git clone 
 cd meet-app
 
 Install dependencies:
