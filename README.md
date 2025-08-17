@@ -26,10 +26,10 @@ A Progressive Web Application (PWA) built with React that allows users to view, 
 
 ---
 
-## Gherkin Scenarios
+**Gherkin Scenarios**
 
-### Feature: Filter events by city
-```gherkin
+**Feature: Filter events by city**
+
 **Feature: Filter events by city**
   As a busy user
   I want to filter events by a chosen city
