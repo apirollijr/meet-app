@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Auth Server</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fc;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+    }
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    button {
+      background: #4285f4;
+      border: none;
+      padding: 10px 16px;
+      color: white;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: #3367d6;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+    pre {
+      background: #1e1e1e;
+      color: #eee;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h1>OAuth2 Test Auth Server</h1>
+
+  <!-- Step 1 -->
+  <div class="card">
+    <h2>Step 1: Get the Google Auth URL</h2>
+    <p>Click below to fetch your Google authorization URL from Lambda:</p>
+    <button id="getAuthUrl">Get Auth URL</button>
+    <pre id="authUrl"></pre>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="card">
+    <h2>Step 2: Exchange code for access token</h2>
+    <p>Paste the <strong>code</strong> from the Google redirect here:</p>
+    <input type="text" id="authCode" placeholder="Paste ?code=... value here" />
+    <button id="getAccessToken">Get Access Token</button>
+    <pre id="accessToken"></pre>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="card">
+    <h2>Step 3: Get the calendar events using your access token</h2>
+    <button id="getEvents">Get Events</button>
+    <pre id="events"></pre>
+  </div>
+
+  <script>
+    const getAuthUrlBtn = document.getElementById("getAuthUrl");
+    const authUrlEl = document.getElementById("authUrl");
+
+    const getAccessTokenBtn = document.getElementById("getAccessToken");
+    const accessTokenEl = document.getElementById("accessToken");
+
+    const getEventsBtn = document.getElementById("getEvents");
+    const eventsEl = document.getElementById("events");
+
+    // === Update with your AWS Lambda endpoints ===
+    const AUTH_URL_ENDPOINT = " https://yvpeiixxcg.execute-api.us-east-1.amazonaws.com/api/get-auth-url";
+    const TOKEN_ENDPOINT = "https://yvpeiixxcg.execute-api.us-east-1.amazonaws.com/api/token";
+    const EVENTS_ENDPOINT = "https://yvpeiixxcg.execute-api.us-east-1.amazonaws.com/api/get-events";
+
+    // Step 1
+    getAuthUrlBtn.onclick = () => {
+      fetch(AUTH_URL_ENDPOINT)
+        .then(res => res.json())
+        .then(data => {
+          authUrlEl.textContent = JSON.stringify(data, null, 2);
+          if (data.authUrl) window.open(data.authUrl, "_blank");
+        })
+        .catch(err => {
+          authUrlEl.textContent = "Error: " + err.message;
+        });
+    };
+
+    // Step 2
+    getAccessTokenBtn.onclick = () => {
+      const code = document.getElementById("authCode").value.trim();
+      if (!code) {
+        accessTokenEl.textContent = "Please paste a code first.";
+        return;
+      }
+      fetch(`${TOKEN_ENDPOINT}/${encodeURIComponent(code)}`)
+        .then(res => res.json())
+        .then(data => {
+          accessTokenEl.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+          accessTokenEl.textContent = "Error: " + err.message;
+        });
+    };
+
+    // Step 3
+    getEventsBtn.onclick = () => {
+      try {
+        const tokenData = JSON.parse(accessTokenEl.textContent);
+        const access_token = tokenData.access_token;
+        if (!access_token) {
+          eventsEl.textContent = "No access_token found.";
+          return;
+        }
+        fetch(`${EVENTS_ENDPOINT}/${encodeURIComponent(access_token)}`)
+          .then(res => res.json())
+          .then(data => {
+            eventsEl.textContent = JSON.stringify(data, null, 2);
+          })
+          .catch(err => {
+            eventsEl.textContent = "Error: " + err.message;
+          });
+      } catch (err) {
+        eventsEl.textContent = "Error parsing access_token.";
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,1477 @@
+{
+  "C:\\www\\meet\\auth-server\\serverless.yml": {
+    "versionFramework": "4.18.1",
+    "servicePath": "C:\\www\\meet\\auth-server\\serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "meet-auth-server",
+      "frameworkVersion": "4",
+      "useDotenv": true,
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "region": "us-east-1",
+        "stage": "dev",
+        "environment": {
+          "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+          "CLIENT_SECRET": "<REDACTED>",
+          "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+          "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+        },
+        "httpApi": {
+          "cors": {
+            "allowedOrigins": [
+              "*"
+            ],
+            "allowedHeaders": [
+              "Content-Type"
+            ],
+            "allowedMethods": [
+              "GET",
+              "OPTIONS"
+            ]
+          }
+        },
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "GetAuthURLLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/meet-auth-server-dev-getAuthURL"
+              }
+            },
+            "GetAccessTokenLogGroup": "<REDACTED>",
+            "GetCalendarEventsLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/meet-auth-server-dev-getCalendarEvents"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "meet-auth-server",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/meet-auth-server-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/meet-auth-server-dev*:*:*"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "meet-auth-server",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "GetAuthURLLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+                  "S3Key": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z/meet-auth-server.zip"
+                },
+                "Handler": "handler.getAuthURL",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "meet-auth-server-dev-getAuthURL",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+                    "CLIENT_SECRET": "<REDACTED>",
+                    "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+                    "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetAuthURLLogGroup"
+              ]
+            },
+            "GetAccessTokenLambdaFunction": "<REDACTED>",
+            "GetCalendarEventsLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+                  "S3Key": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z/meet-auth-server.zip"
+                },
+                "Handler": "handler.getCalendarEvents",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "meet-auth-server-dev-getCalendarEvents",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+                    "CLIENT_SECRET": "<REDACTED>",
+                    "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+                    "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetCalendarEventsLogGroup"
+              ]
+            },
+            "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetAuthURLLambdaFunction"
+                },
+                "CodeSha256": "LWZBMNsTvEgw6czR8+Htypeuip0f+ieKRRofkiSx55Q="
+              }
+            },
+            "GetAccessTokenLambdaVersion70Smcv4XjMGGr1f1kS5pmUiC9mH0tdqu0KxJMJ6wY": "<REDACTED>",
+            "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetCalendarEventsLambdaFunction"
+                },
+                "CodeSha256": "LWZBMNsTvEgw6czR8+Htypeuip0f+ieKRRofkiSx55Q="
+              }
+            },
+            "HttpApi": {
+              "Type": "AWS::ApiGatewayV2::Api",
+              "Properties": {
+                "Name": "dev-meet-auth-server",
+                "ProtocolType": "HTTP",
+                "CorsConfiguration": {
+                  "AllowCredentials": "<REDACTED>",
+                  "AllowHeaders": [
+                    "Content-Type"
+                  ],
+                  "AllowMethods": [
+                    "GET",
+                    "OPTIONS"
+                  ],
+                  "AllowOrigins": [
+                    "*"
+                  ]
+                }
+              }
+            },
+            "HttpApiStage": {
+              "Type": "AWS::ApiGatewayV2::Stage",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "StageName": "$default",
+                "AutoDeploy": true,
+                "DefaultRouteSettings": {
+                  "DetailedMetricsEnabled": false
+                }
+              }
+            },
+            "GetAuthURLLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetAuthURLLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationGetAuthURL": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "GetAuthURLLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteGetApiGetDashauthDashurl": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "GET /api/get-auth-url",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationGetAuthURL"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationGetAuthURL"
+            },
+            "GetAccessTokenLambdaPermissionHttpApi": "<REDACTED>",
+            "HttpApiIntegrationGetAccessToken": "<REDACTED>",
+            "HttpApiRouteGetApiTokenCodeVar": "<REDACTED>",
+            "HttpApiRouteGetApiToken": "<REDACTED>",
+            "GetCalendarEventsLambdaPermissionHttpApi": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetCalendarEventsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "HttpApi"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "HttpApiIntegrationGetCalendarEvents": {
+              "Type": "AWS::ApiGatewayV2::Integration",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "IntegrationType": "AWS_PROXY",
+                "IntegrationUri": {
+                  "Fn::GetAtt": [
+                    "GetCalendarEventsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "PayloadFormatVersion": "2.0",
+                "TimeoutInMillis": 30000
+              }
+            },
+            "HttpApiRouteGetApiGetDasheventsAccesstokenVar": "<REDACTED>",
+            "HttpApiRouteGetApiGetDashevents": {
+              "Type": "AWS::ApiGatewayV2::Route",
+              "Properties": {
+                "ApiId": {
+                  "Ref": "HttpApi"
+                },
+                "RouteKey": "GET /api/get-events",
+                "Target": {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      "integrations",
+                      {
+                        "Ref": "HttpApiIntegrationGetCalendarEvents"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "DependsOn": "HttpApiIntegrationGetCalendarEvents"
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-0601d962-7377",
+              "Export": {
+                "Name": "sls-meet-auth-server-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "GetAuthURLLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI"
+              },
+              "Export": {
+                "Name": "sls-meet-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
+              }
+            },
+            "GetAccessTokenLambdaFunctionQualifiedArn": "<REDACTED>",
+            "GetCalendarEventsLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270"
+              },
+              "Export": {
+                "Name": "sls-meet-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
+              }
+            },
+            "HttpApiId": {
+              "Description": "Id of the HTTP API",
+              "Value": {
+                "Ref": "HttpApi"
+              },
+              "Export": {
+                "Name": "sls-meet-auth-server-dev-HttpApiId"
+              }
+            },
+            "HttpApiUrl": {
+              "Description": "URL of the HTTP API",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-meet-auth-server-dev-HttpApiUrl"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "getAuthURL": {
+          "handler": "handler.getAuthURL",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/api/get-auth-url",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/api/get-auth-url"
+            }
+          ],
+          "name": "meet-auth-server-dev-getAuthURL",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI"
+        },
+        "getAccessToken": "<REDACTED>",
+        "getCalendarEvents": {
+          "handler": "handler.getCalendarEvents",
+          "events": [
+            {
+              "httpApi": {
+                "path": "/api/get-events/{access_token+}",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/api/get-events/{access_token+}"
+            },
+            {
+              "httpApi": {
+                "path": "/api/get-events",
+                "method": "get"
+              },
+              "resolvedMethod": "GET",
+              "resolvedPath": "/api/get-events"
+            }
+          ],
+          "name": "meet-auth-server-dev-getCalendarEvents",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270"
+        }
+      },
+      "plugins": [],
+      "package": {
+        "individually": false,
+        "artifactsS3KeyDirname": "serverless/meet-auth-server/dev/code-artifacts",
+        "deploymentBucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+        "artifact": "C:\\www\\meet\\auth-server\\.serverless\\meet-auth-server.zip",
+        "artifactDirectoryName": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z"
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "environment": {
+        "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+        "CLIENT_SECRET": "<REDACTED>",
+        "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+        "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+      },
+      "httpApi": {
+        "cors": {
+          "allowedOrigins": [
+            "*"
+          ],
+          "allowedHeaders": [
+            "Content-Type"
+          ],
+          "allowedMethods": [
+            "GET",
+            "OPTIONS"
+          ]
+        }
+      },
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "GetAuthURLLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/meet-auth-server-dev-getAuthURL"
+            }
+          },
+          "GetAccessTokenLogGroup": "<REDACTED>",
+          "GetCalendarEventsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/meet-auth-server-dev-getCalendarEvents"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "meet-auth-server",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/meet-auth-server-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/meet-auth-server-dev*:*:*"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "meet-auth-server",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "GetAuthURLLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+                "S3Key": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z/meet-auth-server.zip"
+              },
+              "Handler": "handler.getAuthURL",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "meet-auth-server-dev-getAuthURL",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "<REDACTED>",
+                  "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+                  "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetAuthURLLogGroup"
+            ]
+          },
+          "GetAccessTokenLambdaFunction": "<REDACTED>",
+          "GetCalendarEventsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+                "S3Key": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z/meet-auth-server.zip"
+              },
+              "Handler": "handler.getCalendarEvents",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "meet-auth-server-dev-getCalendarEvents",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "<REDACTED>",
+                  "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+                  "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetCalendarEventsLogGroup"
+            ]
+          },
+          "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetAuthURLLambdaFunction"
+              },
+              "CodeSha256": "LWZBMNsTvEgw6czR8+Htypeuip0f+ieKRRofkiSx55Q="
+            }
+          },
+          "GetAccessTokenLambdaVersion70Smcv4XjMGGr1f1kS5pmUiC9mH0tdqu0KxJMJ6wY": "<REDACTED>",
+          "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetCalendarEventsLambdaFunction"
+              },
+              "CodeSha256": "LWZBMNsTvEgw6czR8+Htypeuip0f+ieKRRofkiSx55Q="
+            }
+          },
+          "HttpApi": {
+            "Type": "AWS::ApiGatewayV2::Api",
+            "Properties": {
+              "Name": "dev-meet-auth-server",
+              "ProtocolType": "HTTP",
+              "CorsConfiguration": {
+                "AllowCredentials": "<REDACTED>",
+                "AllowHeaders": [
+                  "Content-Type"
+                ],
+                "AllowMethods": [
+                  "GET",
+                  "OPTIONS"
+                ],
+                "AllowOrigins": [
+                  "*"
+                ]
+              }
+            }
+          },
+          "HttpApiStage": {
+            "Type": "AWS::ApiGatewayV2::Stage",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "StageName": "$default",
+              "AutoDeploy": true,
+              "DefaultRouteSettings": {
+                "DetailedMetricsEnabled": false
+              }
+            }
+          },
+          "GetAuthURLLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetAuthURLLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationGetAuthURL": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "Fn::GetAtt": [
+                  "GetAuthURLLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetApiGetDashauthDashurl": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /api/get-auth-url",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationGetAuthURL"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationGetAuthURL"
+          },
+          "GetAccessTokenLambdaPermissionHttpApi": "<REDACTED>",
+          "HttpApiIntegrationGetAccessToken": "<REDACTED>",
+          "HttpApiRouteGetApiTokenCodeVar": "<REDACTED>",
+          "HttpApiRouteGetApiToken": "<REDACTED>",
+          "GetCalendarEventsLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetCalendarEventsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationGetCalendarEvents": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "Fn::GetAtt": [
+                  "GetCalendarEventsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetApiGetDasheventsAccesstokenVar": "<REDACTED>",
+          "HttpApiRouteGetApiGetDashevents": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /api/get-events",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationGetCalendarEvents"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationGetCalendarEvents"
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": "serverless-framework-deployments-us-east-1-0601d962-7377",
+            "Export": {
+              "Name": "sls-meet-auth-server-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "GetAuthURLLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI"
+            },
+            "Export": {
+              "Name": "sls-meet-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetAccessTokenLambdaFunctionQualifiedArn": "<REDACTED>",
+          "GetCalendarEventsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270"
+            },
+            "Export": {
+              "Name": "sls-meet-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
+            }
+          },
+          "HttpApiId": {
+            "Description": "Id of the HTTP API",
+            "Value": {
+              "Ref": "HttpApi"
+            },
+            "Export": {
+              "Name": "sls-meet-auth-server-dev-HttpApiId"
+            }
+          },
+          "HttpApiUrl": {
+            "Description": "URL of the HTTP API",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  }
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-meet-auth-server-dev-HttpApiUrl"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "service: meet-auth-server\r\nframeworkVersion: \"4\"\r\nuseDotenv: true\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  region: us-east-1\r\n  stage: dev\r\n  environment:\r\n    CLIENT_ID: ${env:GOOGLE_CLIENT_ID}\r\n    CLIENT_SECRET: ${env:GOOGLE_CLIENT_SECRET}\r\n    REDIRECT_URI: ${env:GOOGLE_REDIRECT_URI}\r\n    CALENDAR_ID: ${env:CALENDAR_ID}\r\n  httpApi:\r\n    cors:\r\n      allowedOrigins: [\"*\"]\r\n      allowedHeaders: [Content-Type]\r\n      allowedMethods: [GET, OPTIONS]\r\n\r\nfunctions:\r\n  getAuthURL:\r\n    handler: handler.getAuthURL\r\n    events:\r\n      - httpApi:\r\n          path: /api/get-auth-url\r\n          method: get\r\n\r\n  getAccessToken:\r\n    handler: handler.getAccessToken\r\n    events:\r\n      # Path-param route (supports codes with slashes via \"+\")\r\n      - httpApi:\r\n          path: /api/token/{code+}\r\n          method: get\r\n      # Query-string route: /api/token?code=...\r\n      - httpApi:\r\n          path: /api/token\r\n          method: get\r\n\r\n  getCalendarEvents:\r\n    handler: handler.getCalendarEvents\r\n    events:\r\n      # Path-param route (supports tokens with slashes via \"+\")\r\n      - httpApi:\r\n          path: /api/get-events/{access_token+}\r\n          method: get\r\n      # Query-string route: /api/get-events?access_token=...\r\n      - httpApi:\r\n          path: /api/get-events\r\n          method: get\r\n\r\nplugins: []\r\npackage:\r\n  individually: false\r\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "orgId": "6a28ec3e-777f-4e52-84a7-7d38bbb3a7fa",
+    "orgName": "apirollijr",
+    "userId": "qLPpwF3pN4yGjlpf1W",
+    "userName": "apirollijr",
+    "serviceProviderAwsAccountId": "320765978934",
+    "serviceProviderAwsCfStackName": "meet-auth-server-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:320765978934:stack/meet-auth-server-dev/82691500-80eb-11f0-ad66-127c09af3d29",
+    "serviceProviderAwsCfStackCreated": "2025-08-24T13:09:04.314Z",
+    "serviceProviderAwsCfStackUpdated": "2025-08-24T15:14:15.937Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "GetAccessTokenLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:320765978934:function:meet-auth-server-dev-getAccessToken:12",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-meet-auth-server-dev-GetAccessTokenLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "GetAuthURLLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:320765978934:function:meet-auth-server-dev-getAuthURL:12",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-meet-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "GetCalendarEventsLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:320765978934:function:meet-auth-server-dev-getCalendarEvents:12",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-meet-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "HttpApiId",
+        "OutputValue": "yvpeiixxcg",
+        "Description": "Id of the HTTP API",
+        "ExportName": "sls-meet-auth-server-dev-HttpApiId"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-0601d962-7377",
+        "ExportName": "sls-meet-auth-server-dev-ServerlessDeploymentBucketName"
+      },
+      {
+        "OutputKey": "HttpApiUrl",
+        "OutputValue": "https://yvpeiixxcg.execute-api.us-east-1.amazonaws.com",
+        "Description": "URL of the HTTP API",
+        "ExportName": "sls-meet-auth-server-dev-HttpApiUrl"
+      }
+    ],
+    "compiledCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "GetAuthURLLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/meet-auth-server-dev-getAuthURL"
+          }
+        },
+        "GetAccessTokenLogGroup": "<REDACTED>",
+        "GetCalendarEventsLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/meet-auth-server-dev-getCalendarEvents"
+          }
+        },
+        "IamRoleLambdaExecution": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lambda.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Policies": [
+              {
+                "PolicyName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "meet-auth-server",
+                      "dev",
+                      "lambda"
+                    ]
+                  ]
+                },
+                "PolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "logs:TagResource"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/meet-auth-server-dev*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:PutLogEvents"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/meet-auth-server-dev*:*:*"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "Path": "/",
+            "RoleName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "meet-auth-server",
+                  "dev",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  "lambdaRole"
+                ]
+              ]
+            }
+          }
+        },
+        "GetAuthURLLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+              "S3Key": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z/meet-auth-server.zip"
+            },
+            "Handler": "handler.getAuthURL",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "meet-auth-server-dev-getAuthURL",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+                "CLIENT_SECRET": "<REDACTED>",
+                "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+                "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "GetAuthURLLogGroup"
+          ]
+        },
+        "GetAccessTokenLambdaFunction": "<REDACTED>",
+        "GetCalendarEventsLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-0601d962-7377",
+              "S3Key": "serverless/meet-auth-server/dev/1756048838518-2025-08-24T15:20:38.518Z/meet-auth-server.zip"
+            },
+            "Handler": "handler.getCalendarEvents",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "meet-auth-server-dev-getCalendarEvents",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "CLIENT_ID": "37793522792-g0r3sqnieskaidj3uapjcorr6lo556u9.apps.googleusercontent.com",
+                "CLIENT_SECRET": "<REDACTED>",
+                "REDIRECT_URI": "https://meet-app-smoky-two.vercel.app",
+                "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "GetCalendarEventsLogGroup"
+          ]
+        },
+        "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "GetAuthURLLambdaFunction"
+            },
+            "CodeSha256": "LWZBMNsTvEgw6czR8+Htypeuip0f+ieKRRofkiSx55Q="
+          }
+        },
+        "GetAccessTokenLambdaVersion70Smcv4XjMGGr1f1kS5pmUiC9mH0tdqu0KxJMJ6wY": "<REDACTED>",
+        "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "GetCalendarEventsLambdaFunction"
+            },
+            "CodeSha256": "LWZBMNsTvEgw6czR8+Htypeuip0f+ieKRRofkiSx55Q="
+          }
+        },
+        "HttpApi": {
+          "Type": "AWS::ApiGatewayV2::Api",
+          "Properties": {
+            "Name": "dev-meet-auth-server",
+            "ProtocolType": "HTTP",
+            "CorsConfiguration": {
+              "AllowHeaders": [
+                "Content-Type"
+              ],
+              "AllowMethods": [
+                "GET",
+                "OPTIONS"
+              ],
+              "AllowOrigins": [
+                "*"
+              ]
+            }
+          }
+        },
+        "HttpApiStage": {
+          "Type": "AWS::ApiGatewayV2::Stage",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "StageName": "$default",
+            "AutoDeploy": true,
+            "DefaultRouteSettings": {
+              "DetailedMetricsEnabled": false
+            }
+          }
+        },
+        "GetAuthURLLambdaPermissionHttpApi": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "GetAuthURLLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  "/*"
+                ]
+              ]
+            }
+          }
+        },
+        "HttpApiIntegrationGetAuthURL": {
+          "Type": "AWS::ApiGatewayV2::Integration",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "IntegrationType": "AWS_PROXY",
+            "IntegrationUri": {
+              "Fn::GetAtt": [
+                "GetAuthURLLambdaFunction",
+                "Arn"
+              ]
+            },
+            "PayloadFormatVersion": "2.0",
+            "TimeoutInMillis": 30000
+          }
+        },
+        "HttpApiRouteGetApiGetDashauthDashurl": {
+          "Type": "AWS::ApiGatewayV2::Route",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "RouteKey": "GET /api/get-auth-url",
+            "Target": {
+              "Fn::Join": [
+                "/",
+                [
+                  "integrations",
+                  {
+                    "Ref": "HttpApiIntegrationGetAuthURL"
+                  }
+                ]
+              ]
+            }
+          },
+          "DependsOn": "HttpApiIntegrationGetAuthURL"
+        },
+        "GetAccessTokenLambdaPermissionHttpApi": "<REDACTED>",
+        "HttpApiIntegrationGetAccessToken": "<REDACTED>",
+        "HttpApiRouteGetApiTokenCodeVar": "<REDACTED>",
+        "HttpApiRouteGetApiToken": "<REDACTED>",
+        "GetCalendarEventsLambdaPermissionHttpApi": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "GetCalendarEventsLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "HttpApi"
+                  },
+                  "/*"
+                ]
+              ]
+            }
+          }
+        },
+        "HttpApiIntegrationGetCalendarEvents": {
+          "Type": "AWS::ApiGatewayV2::Integration",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "IntegrationType": "AWS_PROXY",
+            "IntegrationUri": {
+              "Fn::GetAtt": [
+                "GetCalendarEventsLambdaFunction",
+                "Arn"
+              ]
+            },
+            "PayloadFormatVersion": "2.0",
+            "TimeoutInMillis": 30000
+          }
+        },
+        "HttpApiRouteGetApiGetDasheventsAccesstokenVar": "<REDACTED>",
+        "HttpApiRouteGetApiGetDashevents": {
+          "Type": "AWS::ApiGatewayV2::Route",
+          "Properties": {
+            "ApiId": {
+              "Ref": "HttpApi"
+            },
+            "RouteKey": "GET /api/get-events",
+            "Target": {
+              "Fn::Join": [
+                "/",
+                [
+                  "integrations",
+                  {
+                    "Ref": "HttpApiIntegrationGetCalendarEvents"
+                  }
+                ]
+              ]
+            }
+          },
+          "DependsOn": "HttpApiIntegrationGetCalendarEvents"
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": "serverless-framework-deployments-us-east-1-0601d962-7377",
+          "Export": {
+            "Name": "sls-meet-auth-server-dev-ServerlessDeploymentBucketName"
+          }
+        },
+        "GetAuthURLLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "GetAuthURLLambdaVersiond4B6VHLIEsSxArmIaQena8BCI3p64sEPjISrLAt75ZI"
+          },
+          "Export": {
+            "Name": "sls-meet-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
+          }
+        },
+        "GetAccessTokenLambdaFunctionQualifiedArn": "<REDACTED>",
+        "GetCalendarEventsLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "GetCalendarEventsLambdaVersionID4x51LSbF43Q97k6kI9RC2yhYjlGCEEF4s4p4WU270"
+          },
+          "Export": {
+            "Name": "sls-meet-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
+          }
+        },
+        "HttpApiId": {
+          "Description": "Id of the HTTP API",
+          "Value": {
+            "Ref": "HttpApi"
+          },
+          "Export": {
+            "Name": "sls-meet-auth-server-dev-HttpApiId"
+          }
+        },
+        "HttpApiUrl": {
+          "Description": "URL of the HTTP API",
+          "Value": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "HttpApi"
+                },
+                ".execute-api.",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix"
+                }
+              ]
+            ]
+          },
+          "Export": {
+            "Name": "sls-meet-auth-server-dev-HttpApiUrl"
+          }
+        }
+      }
+    }
+  }
+}
