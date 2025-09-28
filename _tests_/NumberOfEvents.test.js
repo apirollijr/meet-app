@@ -1,4 +1,4 @@
-// _tests_/NumberOfEvents.test.js
+
 import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -33,7 +33,7 @@ describe("<NumberOfEvents />", () => {
     await user.clear(input);
     await user.type(input, "10");
 
-    // NOTE: for type="number", toHaveValue expects a number, not a string
+  
     expect(input).toHaveValue(10);
   });
 });

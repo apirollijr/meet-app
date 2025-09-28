@@ -33,7 +33,7 @@ test('renders show details button', () => {
 
 test('details are hidden by default', async () => {
   render(<Event event={allEvents[0]} />);
-  // details section should not be in the document initially
+  
   expect(screen.queryByText(allEvents[0].description)).not.toBeInTheDocument();
 });
 
@@ -42,7 +42,7 @@ test('shows details when the button is clicked', () => {
   const button = screen.getByRole('button', { name: /show details/i });
   fireEvent.click(button);
 
-  // just check part of the description instead of the whole text
+  
   expect(screen.getByText(/have you wondered/i)).toBeInTheDocument();
 });
 
