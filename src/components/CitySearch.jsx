@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { getEvents } from "../api";
 
-export default function CitySearch({ allLocations = [], setCurrentCity = () => {} }) {
+export default function CitySearch({ currentCity, setCurrentCity }) {
   const [query, setQuery] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
+  const [allLocations, setAllLocations] = useState([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setSuggestions(allLocations);
-  }, [`${allLocations}`]);
+    const init = async () => {
+      const data = await getEvents({ location: "all", pageSize: 200 });
+      const uniq = Array.from(new Set(data.map(e => e.location))).sort();
+      setAllLocations(uniq);
+    };
+    init();
+  }, []);
 
-  const handleInputChanged = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-    const filtered = allLocations ? allLocations.filter((loc) => loc.toUpperCase().indexOf(value.toUpperCase()) > -1) : [];
-    setSuggestions(filtered);
-    setShowSuggestions(true);
-  };
+  useEffect(() => {
+    if (currentCity === "all") setQuery("");
+    else setQuery(currentCity);
+  }, [currentCity]);
 
-  const handleItemClicked = (e) => {
-    const value = e.target.textContent;
-    setQuery(value);
-    setShowSuggestions(false);
-    setCurrentCity(value);
+  const suggestions = useMemo(() => {
+    if (!query) return allLocations;
+    const q = query.toLowerCase();
+    return allLocations.filter(loc => loc.toLowerCase().includes(q));
+  }, [allLocations, query]);
+
+  const applyCity = (city) => {
+    setCurrentCity(city === "See all cities" ? "all" : city);
+    setOpen(false);
   };
 
   return (
@@ -29,18 +36,22 @@ export default function CitySearch({ allLocations = [], setCurrentCity = () => {
       <input
         className="city"
         type="text"
+        placeholder="Search for a city"
         value={query}
-        onChange={handleInputChanged}
-        onFocus={() => setShowSuggestions(true)}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
       />
-      {showSuggestions ? (
-        <ul className="suggestions" role="list">
-          {suggestions.map((s) => (
-            <li onClick={handleItemClicked} key={s}>{s}</li>
+      {open && (
+        <ul role="list" className="suggestions">
+          <li onMouseDown={() => applyCity("See all cities")}>See all cities</li>
+          {suggestions.map(loc => (
+            <li key={loc} onMouseDown={() => applyCity(loc)}>{loc}</li>
           ))}
-          <li key="See all cities" onClick={handleItemClicked}><b>See all cities</b></li>
         </ul>
-      ) : null}
+      )}
     </div>
   );
 }
