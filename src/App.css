@@ -1,108 +1,71 @@
-/* -------- Base / reset -------- */
-*,
-*::before,
-*::after { box-sizing: border-box; }
-
-html, body { height: 100%; }
-
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  color: #0f172a;              /* slate-900 */
-  background: #f8fafc;         /* slate-50 */
+  background: #f8fafc;
+  color: #0b1220;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
 }
 
-/* -------- App layout -------- */
 .app {
-  max-width: 860px;            /* center content on wide screens */
-  margin: 3rem auto;           /* centers horizontally */
-  padding: 0 1rem;             /* safe side padding */
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 24px;
 }
 
 .app__title {
-  margin: 0 0 1.25rem 0;
-  font-size: clamp(2rem, 4vw, 3rem);
-  letter-spacing: -0.02em;
+  font-size: 56px;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  color: #0f172a;
 }
 
-/* Controls row */
 .controls {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem 2rem;
+  align-items: start;
 }
 
-@media (min-width: 640px) {
-  .controls { grid-template-columns: 2fr 1fr; }
+#city-search {
+  position: relative;
 }
 
-/* -------- Inputs -------- */
-label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: 600;
+#city-search .suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 4px 0;
+  margin: 0;
+  list-style: none;
+  max-height: 280px;
+  overflow: auto;
+  z-index: 20;
+}
+
+#city-search .suggestions li {
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  line-height: 1.25;
+}
+
+#city-search .suggestions li:hover,
+#city-search .suggestions li:focus {
+  background: #f1f5f9;
 }
 
 input[type="text"],
 input[type="number"] {
-  width: 100%;
-  padding: 0.55rem 0.7rem;
-  border: 1px solid #cbd5e1;   /* slate-300 */
-  border-radius: 8px;
-  background: #fff;
-  font: inherit;
-  outline: none;
-  transition: box-shadow .15s ease, border-color .15s ease;
+  height: 44px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 0.75rem;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border-color: #3b82f6;       /* blue-500 */
-  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
-}
-
-/* CitySearch specifics (optional) */
-#city-search .city { width: 100%; }
-
-/* -------- Event list -------- */
-#event-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 0.75rem;
-}
-
-#event-list li article {
-  background: #fff;
-  border: 1px solid #e5e7eb;   /* gray-200 */
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-}
-
-#event-list h2 {
-  margin: 0 0 .35rem 0;
-  font-size: 1.05rem;
-}
-
-#event-list p {
-  margin: .15rem 0;
-  color: #475569;              /* slate-600 */
-}
-
-button {
-  margin-top: .5rem;
-  padding: .5rem .75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background: #f8fafc;
-  cursor: pointer;
-  transition: background .15s ease, border-color .15s ease;
-}
-
-button:hover {
-  background: #eef2ff;         /* indigo-50 */
-  border-color: #818cf8;       /* indigo-400 */
+.number-of-events label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
 }
