@@ -1,7 +1,7 @@
 import React from "react";
 import Event from "./Event";
 
-export default function EventList({ events }) {
+export default function EventList({ events = [] }) {
   return (
     <ul id="event-list" role="list">
       {events.map((event) => (

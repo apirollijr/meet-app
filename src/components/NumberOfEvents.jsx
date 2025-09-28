@@ -11,8 +11,11 @@ export default function NumberOfEvents({ currentNOE, setCurrentNOE }) {
         min="1"
         value={currentNOE}
         onChange={(e) => {
-          const v = Number(e.target.value || 1);
-          setCurrentNOE(Number.isNaN(v) ? 1 : v);
+          const v = e.target.value;
+          setCurrentNOE(v === "" ? "" : Math.max(1, Number(v)));
+        }}
+        onBlur={(e) => {
+          if (e.target.value === "") setCurrentNOE(1);
         }}
       />
     </div>

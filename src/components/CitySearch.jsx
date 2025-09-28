@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getEvents } from "../api";
 
-export default function CitySearch({ currentCity, setCurrentCity }) {
+export default function CitySearch({
+  currentCity = "all",
+  setCurrentCity = () => {}
+}) {
   const [query, setQuery] = useState("");
   const [allLocations, setAllLocations] = useState([]);
   const [open, setOpen] = useState(false);
@@ -9,25 +12,25 @@ export default function CitySearch({ currentCity, setCurrentCity }) {
   useEffect(() => {
     const init = async () => {
       const data = await getEvents({ location: "all", pageSize: 200 });
-      const uniq = Array.from(new Set(data.map(e => e.location))).sort();
+      const uniq = Array.from(new Set(data.map((e) => e.location))).sort();
       setAllLocations(uniq);
     };
     init();
   }, []);
 
   useEffect(() => {
-    if (currentCity === "all") setQuery("");
-    else setQuery(currentCity);
+    setQuery(currentCity === "all" ? "" : currentCity);
   }, [currentCity]);
 
   const suggestions = useMemo(() => {
-    if (!query) return allLocations;
     const q = query.toLowerCase();
-    return allLocations.filter(loc => loc.toLowerCase().includes(q));
+    return !q ? allLocations : allLocations.filter((l) => l.toLowerCase().includes(q));
   }, [allLocations, query]);
 
   const applyCity = (city) => {
-    setCurrentCity(city === "See all cities" ? "all" : city);
+    const value = city === "See all cities" ? "all" : city;
+    setCurrentCity(value);
+    setQuery(city === "See all cities" ? "See all cities" : city);
     setOpen(false);
   };
 
@@ -35,8 +38,8 @@ export default function CitySearch({ currentCity, setCurrentCity }) {
     <div id="city-search">
       <input
         className="city"
-        type="text"
         placeholder="Search for a city"
+        type="text"
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
@@ -46,10 +49,12 @@ export default function CitySearch({ currentCity, setCurrentCity }) {
       />
       {open && (
         <ul role="list" className="suggestions">
-          <li onMouseDown={() => applyCity("See all cities")}>See all cities</li>
-          {suggestions.map(loc => (
-            <li key={loc} onMouseDown={() => applyCity(loc)}>{loc}</li>
+          {suggestions.map((loc) => (
+            <li key={loc} onMouseDown={() => applyCity(loc)}>
+              {loc}
+            </li>
           ))}
+          <li onMouseDown={() => applyCity("See all cities")}>See all cities</li>
         </ul>
       )}
     </div>
