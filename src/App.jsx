@@ -3,7 +3,7 @@ import CitySearch from "./components/CitySearch";
 import NumberOfEvents from "./components/NumberOfEvents";
 import EventList from "./components/EventList";
 import { getEvents } from "./api";
-import "./app.css";
+import "./App.css";
 
 export default function App() {
   const [events, setEvents] = useState([]);
