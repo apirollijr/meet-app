@@ -1,25 +1,39 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import NumberOfEvents from '../src/components/NumberOfEvents';
+// _tests_/NumberOfEvents.test.js
+import React, { useState } from "react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import NumberOfEvents from "../src/components/NumberOfEvents";
 
-test('renders textbox input', () => {
-  render(<NumberOfEvents />);
-  expect(screen.getByRole('textbox')).toBeInTheDocument();
-});
+function ControlledWrapper() {
+  const [noe, setNoe] = useState(32);
+  return <NumberOfEvents currentNOE={noe} setCurrentNOE={setNoe} />;
+}
 
-test('default value is 32', () => {
-  render(<NumberOfEvents />);
-  expect(screen.getByRole('textbox')).toHaveValue("32"); 
-});
+describe("<NumberOfEvents />", () => {
+  test("renders number input (spinbutton)", () => {
+    render(<ControlledWrapper />);
+    expect(
+      screen.getByRole("spinbutton", { name: /number of events/i })
+    ).toBeInTheDocument();
+  });
 
-test('user can change value of textbox', async () => {
-  const user = userEvent.setup();
-  render(<NumberOfEvents />);
-  const input = screen.getByRole('textbox');
+  test("default value is 32", () => {
+    render(<ControlledWrapper />);
+    expect(
+      screen.getByRole("spinbutton", { name: /number of events/i })
+    ).toHaveValue(32);
+  });
 
-  await user.clear(input);
-  await user.type(input, '10');
+  test("user can change value of the number input", async () => {
+    const user = userEvent.setup();
+    render(<ControlledWrapper />);
 
-  expect(input).toHaveValue("10"); 
+    const input = screen.getByRole("spinbutton", { name: /number of events/i });
+
+    await user.clear(input);
+    await user.type(input, "10");
+
+    // NOTE: for type="number", toHaveValue expects a number, not a string
+    expect(input).toHaveValue(10);
+  });
 });

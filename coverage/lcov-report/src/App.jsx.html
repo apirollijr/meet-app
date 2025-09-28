@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -81,15 +81,38 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -99,32 +122,45 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/App.jsx
-import React from 'react';
-import CitySearch from './components/CitySearch';
-import EventList from './components/EventList';
-import NumberOfEvents from './components/NumberOfEvents';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from "react";
+import CitySearch from "./components/CitySearch";
+import NumberOfEvents from "./components/NumberOfEvents";
+import EventList from "./components/EventList";
+import { getEvents } from "./api";
 &nbsp;
+export default function <span class="fstat-no" title="function not covered" >App(</span>) {
+  const [events, setEvents] = <span class="cstat-no" title="statement not covered" >useState([]);</span>
+  const [currentCity, setCurrentCity] = <span class="cstat-no" title="statement not covered" >useState("all");</span>
+  const [currentNOE, setCurrentNOE] = <span class="cstat-no" title="statement not covered" >useState(32);</span>
 &nbsp;
-const App = () =&gt; {
- return (
-   &lt;div&gt;
-     &lt;CitySearch /&gt;
-     &lt;EventList /&gt;
-     &lt;NumberOfEvents /&gt;
-   &lt;/div&gt;
- );
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const load = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+      const data = <span class="cstat-no" title="statement not covered" >await getEvents({ location: currentCity, pageSize: currentNOE });</span>
+<span class="cstat-no" title="statement not covered" >      setEvents(data);</span>
+    };
+<span class="cstat-no" title="statement not covered" >    load();</span>
+  }, [currentCity, currentNOE]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;div className="app"&gt;
+      &lt;h1 className="app__title"&gt;Meet App&lt;/h1&gt;
+      &lt;div className="controls"&gt;
+        &lt;CitySearch currentCity={currentCity} setCurrentCity={setCurrentCity} /&gt;
+        &lt;NumberOfEvents currentNOE={currentNOE} setCurrentNOE={setCurrentNOE} /&gt;
+      &lt;/div&gt;
+      &lt;EventList events={events} /&gt;
+    &lt;/div&gt;
+  );
 }
-&nbsp;
-&nbsp;
-export default App;</pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-09-07T16:32:36.477Z
+                at 2025-09-28T19:22:41.335Z
             </div>
         <script src="../prettify.js"></script>
         <script>
