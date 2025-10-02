@@ -1,43 +1,42 @@
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import App from '../src/App';
 
-import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import mockEvents from "../src/mock-data";
+jest.mock('../src/api', () => {
+  const data = Array.from({ length: 50 }).map((_, i) => ({
+    id: `e-${i + 1}`,
+    summary: `Event ${i + 1}`,
+    title: `Event ${i + 1}`,
+    location: i % 2 ? 'Berlin, Germany' : 'London, UK',
+    description: `Description ${i + 1}`,
+    created: `2025-10-${String((i % 28) + 1).padStart(2, '0')}T10:00:00Z`,
+  }));
+  return {
+    __esModule: true,
+    getEvents: jest.fn().mockResolvedValue(data),
+    extractLocations: jest.fn(list => {
+      const set = new Set(list.map(e => e.location));
+      return Array.from(set).sort();
+    }),
+  };
+});
 
-jest.mock("../src/api", () => ({
-  getEvents: jest.fn(async ({ pageSize } = {}) => {
-    const size = pageSize ?? 32;
-    return mockEvents.slice(0, size);
-  }),
-}));
-
-import App from "../src/App";
-
-describe("integration tests: Number of Events with App & EventList", () => {
+describe('integration tests: Number of Events with App & EventList', () => {
   test("changes the number of rendered events when user changes the 'number of events' input", async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    
-    const noeInput =
-      (await screen.findByLabelText(/number of events/i)) ||
-      screen.getByRole("spinbutton");
+    const initialItems = await screen.findAllByTestId('event');
+    expect(initialItems.length).toBe(32);
 
+    const input = screen.getByTestId('number-of-events');
+    await user.clear(input);
+    await user.type(input, '10');
 
-    await user.clear(noeInput);
-    await user.type(noeInput, "10");
-    if (String(noeInput.value) !== "10") {
-      await user.tripleClick(noeInput);
-      await user.type(noeInput, "10");
-    }
-
-    await waitFor(() => expect(String(noeInput.value)).toBe("10"));
-
-  
-    await waitFor(() =>
-      expect(screen.getAllByRole("listitem")).toHaveLength(10)
-    );
-
-    
+    await waitFor(async () => {
+      const items = await screen.findAllByTestId('event');
+      expect(items.length).toBe(10);
+    });
   });
 });
