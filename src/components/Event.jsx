@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-export default function Event({ event }) {
+export default function Event({ event = {} }) {
   const [open, setOpen] = useState(false);
+
   return (
-    <article data-testid="event" className="event-card">
-      <h2>{event.summary}</h2>
-      <p>{event.location}</p>
-      <p>{new Date(event.created || event.start?.dateTime || event.start?.date).toISOString()}</p>
-      <button onClick={() => setOpen((v) => !v)}>{open ? "Hide details" : "Show details"}</button>
-      {open && event.description && <p className="event-desc">{event.description}</p>}
+    <article className="event">
+      <h3>{event.title || ''}</h3>
+      <p>{event.location || ''}</p>
+
+      <button
+        type="button"
+        className="toggle-details"
+        data-testid="toggle-details"
+        aria-expanded={open}
+        onClick={() => setOpen(o => !o)}
+      >
+        {open ? 'Hide details' : 'Show details'}
+      </button>
+
+      {open && (
+        <div className="event-details" data-testid="event-details">
+          <p>{event.description || 'Event details…'}</p>
+        </div>
+      )}
     </article>
   );
 }

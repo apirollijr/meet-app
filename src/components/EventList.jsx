@@ -1,12 +1,12 @@
-import React from "react";
-import Event from "./Event";
+import React from 'react';
+import Event from './Event.jsx';
 
 export default function EventList({ events = [] }) {
   return (
-    <ul id="event-list" role="list">
-      {events.map((event) => (
-        <li key={event.id} role="listitem">
-          <Event event={event} />
+    <ul className="event-list">
+      {events.map(ev => (
+        <li key={ev.id || ev.link || ev.title} data-testid="event">
+          <Event event={ev} />
         </li>
       ))}
     </ul>

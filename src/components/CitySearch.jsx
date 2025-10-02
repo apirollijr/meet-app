@@ -1,62 +1,30 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { getEvents } from "../api";
+import React, { useEffect, useState } from 'react';
+import { getEvents } from '../api.js';
 
-export default function CitySearch({
-  currentCity = "all",
-  setCurrentCity = () => {}
-}) {
-  const [query, setQuery] = useState("");
+export default function CitySearch({ value, onChange }) {
   const [allLocations, setAllLocations] = useState([]);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      const data = await getEvents({ location: "all", pageSize: 200 });
-      const uniq = Array.from(new Set(data.map((e) => e.location))).sort();
-      setAllLocations(uniq);
-    };
-    init();
+    let active = true;
+    (async () => {
+      const data = await getEvents({ location: 'all', pageSize: 200 });
+      const uniq = Array.from(new Set(data.map(e => e.location))).sort();
+      if (active) setAllLocations(uniq);
+    })();
+    return () => { active = false; };
   }, []);
 
-  useEffect(() => {
-    setQuery(currentCity === "all" ? "" : currentCity);
-  }, [currentCity]);
-
-  const suggestions = useMemo(() => {
-    const q = query.toLowerCase();
-    return !q ? allLocations : allLocations.filter((l) => l.toLowerCase().includes(q));
-  }, [allLocations, query]);
-
-  const applyCity = (city) => {
-    const value = city === "See all cities" ? "all" : city;
-    setCurrentCity(value);
-    setQuery(city === "See all cities" ? "See all cities" : city);
-    setOpen(false);
-  };
-
   return (
-    <div id="city-search">
+    <div className="city-search">
       <input
-        className="city"
-        placeholder="Search for a city"
-        type="text"
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
+        aria-label="City"
+        value={value ?? ''}
+        onChange={e => onChange?.(e.target.value)}
+        list="city-options"
       />
-      {open && (
-        <ul role="list" className="suggestions">
-          {suggestions.map((loc) => (
-            <li key={loc} onMouseDown={() => applyCity(loc)}>
-              {loc}
-            </li>
-          ))}
-          <li onMouseDown={() => applyCity("See all cities")}>See all cities</li>
-        </ul>
-      )}
+      <datalist id="city-options">
+        {allLocations.map(loc => <option key={loc} value={loc} />)}
+      </datalist>
     </div>
   );
 }
