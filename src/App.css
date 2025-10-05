@@ -1,89 +1,63 @@
-html, body, #root { height: 100%; }
-* { box-sizing: border-box; }
-
 body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f9fb;
   margin: 0;
-  background: #f5f7fb;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  color: #0f172a;
-}
-
-.app {
+  padding: 0;
   min-height: 100vh;
-  width: 100%;
-  display: grid;
-  place-items: start center;
-  padding: 32px 16px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.container {
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+
+div {
+  box-sizing: border-box;
 }
 
-.app__title {
-  margin: 0 0 20px;
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  text-align: center;
+.app-container {
+  max-width: 700px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 32px;
 }
 
 .controls {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 18px 24px;
-  align-items: end;
-  margin-bottom: 24px;
-}
-
-#city-search .city,
-.number-of-events input {
-  width: 100%;
-  height: 44px;
-  padding: 10px 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  outline: none;
-  background: #fff;
-}
-
-.number-of-events label {
-  display: block;
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 6px;
-}
-
-#event-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
+  display: flex;
   gap: 16px;
+  margin-bottom: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+input, select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: #0078d7;
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .event-card {
-  background: #fff;
-  border: 1px solid #eef2ff;
-  border-radius: 14px;
-  padding: 18px 20px;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+  background: #f1f6fa;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
 }
 
-.event-card h2 { margin: 0 0 8px; font-size: 24px; }
-.event-card p { margin: 6px 0; color: #64748b; font-size: 14px; }
-
-.event-card button {
-  margin-top: 10px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-@media (max-width: 720px) {
-  .controls { grid-template-columns: 1fr; }
+.event-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
 }

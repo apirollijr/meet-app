@@ -1,14 +1,18 @@
 import React from 'react';
 import Event from './Event.jsx';
 
-export default function EventList({ events = [] }) {
+export default function EventList({ events }) {
   return (
-    <ul className="event-list">
-      {events.map(ev => (
-        <li key={ev.id || ev.link || ev.title} data-testid="event">
-          <Event event={ev} />
-        </li>
+    <div className="event-list">
+      {events.map(event => (
+        <div className="event-card" key={event.id}>
+          {/* Render event details here */}
+          <h3>{event.title}</h3>
+          <p>{event.date}</p>
+          <p>{event.location}</p>
+          {/* ...other event details... */}
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }

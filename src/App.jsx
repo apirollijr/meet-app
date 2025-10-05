@@ -3,6 +3,7 @@ import CitySearch from './components/CitySearch.jsx';
 import NumberOfEvents from './components/NumberOfEvents.jsx';
 import EventList from './components/EventList.jsx';
 import { getEvents } from './api.js';
+import './App.css';
 
 export default function App() {
   const [events, setEvents] = useState([]);
@@ -20,8 +21,8 @@ export default function App() {
     return () => { active = false; };
   }, [currentCity, currentNOE]);
 
-  return (
-    <div>
+    return (
+    <div className="app-container">
       <div className="controls">
         <CitySearch value={currentCity} onChange={setCurrentCity} />
         <NumberOfEvents
