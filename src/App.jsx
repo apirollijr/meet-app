@@ -5,6 +5,8 @@ import EventList from './components/EventList.jsx';
 import { getEvents } from './api.js';
 import './App.css';
 
+
+
 export default function App() {
   const [events, setEvents] = useState([]);
   const [currentCity, setCurrentCity] = useState('all');
