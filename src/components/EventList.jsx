@@ -1,18 +1,21 @@
 import React from 'react';
-import Event from './Event.jsx';
+import { Row, Col, Card } from 'react-bootstrap';
+import Event from './Event';
 
-export default function EventList({ events }) {
+export default function EventList({ events = [] }) {
   return (
-    <div className="event-list">
-      {events.map(event => (
-        <div className="event-card" key={event.id}>
-          {/* Render event details here */}
-          <h3>{event.title}</h3>
-          <p>{event.date}</p>
-          <p>{event.location}</p>
-          {/* ...other event details... */}
-        </div>
-      ))}
+    <div className="event-list-section">
+      <Row className="g-4" role="list">
+        {events.map(event => (
+          <Col key={event.id} lg={12} md={12} sm={12} role="listitem">
+            <Card className="event-card h-100">
+              <Card.Body>
+                <Event event={event} />
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </div>
   );
 }

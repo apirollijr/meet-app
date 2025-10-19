@@ -1,19 +1,22 @@
 // src/setupTests.js
 
-import "@testing-library/jest-dom";
+import '@testing-library/jest-dom';
 
-// Here, add portions of the warning messages you want to intentionally prevent from appearing
-const MESSAGES_TO_IGNORE = [
-  "When testing, code that causes React state updates should be wrapped into act(...):",
-  "Error:",
-  "The above error occurred",
-];
+// Suppress console.error warnings during tests
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      (args[0].includes('Warning: An update to') ||
+       args[0].includes('Warning: React does not recognize'))
+    ) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+});
 
-const originalError = console.error.bind(console.error);
-
-console.error = (...args) => {
-  const ignoreMessage = MESSAGES_TO_IGNORE.find((message) =>
-    args.toString().includes(message),
-  );
-  if (!ignoreMessage) originalError(...args);
-};
+afterAll(() => {
+  console.error = originalError;
+});

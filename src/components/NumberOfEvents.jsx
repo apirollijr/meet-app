@@ -1,29 +1,50 @@
-import React from 'react';
+// filepath: c:\www\meet\src\components\NumberOfEvents.jsx
+import React, { useState, useEffect } from 'react';
 
-export default function NumberOfEvents({ value = 32, onChange }) {
-  // Normalize to a positive integer and notify parent
-  const notify = (raw) => {
-    const n = Math.max(1, Number(raw) || 1);
-    onChange?.(n);
+export default function NumberOfEvents({ value, onChange, setErrorAlert }) {
+  const [internalValue, setInternalValue] = useState(value || 32);
+  
+  // Update internal value when prop value changes
+  useEffect(() => {
+    if (value !== undefined) {
+      setInternalValue(value);
+    }
+  }, [value]);
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    const numValue = Number(newValue);
+    
+    // Always update the display value
+    setInternalValue(newValue);
+    
+    // Call onChange for valid numbers
+    if (onChange && numValue > 0 && !isNaN(numValue)) {
+      onChange(numValue);
+    }
+    
+    // Handle validation alerts
+    if (setErrorAlert) {
+      if (newValue === '' || isNaN(numValue) || numValue <= 0) {
+        setErrorAlert("Please enter a valid positive number");
+      } else {
+        setErrorAlert("");
+      }
+    }
   };
 
-  const handleChange = (e) => notify(e.target.value);
-  const handleInput  = (e) => notify(e.target.value); // important for jsdom/user-event
-  const handleBlur   = (e) => notify(e.target.value);
-
   return (
-    <div className="number-of-events">
-      <label htmlFor="number-of-events">Number of events</label>
+    <div>
       <input
-        id="number-of-events"
-        data-testid="number-of-events"
         type="number"
-        min={1}
-        /* Use uncontrolled input so the DOM value reflects user typing immediately */
-        defaultValue={value}
-        onInput={handleInput}
+        className="form-control"
+        data-testid="number-of-events"
+        id="number-of-events"
+        min="1"
+        placeholder="Number of events"
+        aria-label="Number of events"
+        value={internalValue}
         onChange={handleChange}
-        onBlur={handleBlur}
       />
     </div>
   );

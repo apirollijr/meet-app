@@ -1,68 +1,83 @@
 import React, { useEffect, useState } from 'react';
 import { getEvents, extractLocations } from '../api';
 
-export default function CitySearch({ allLocations: propsLocations, onChange }) {
-  const [query, setQuery] = useState('');
-  const [allLocations, setAllLocations] = useState(propsLocations || []);
+export default function CitySearch({ value, onChange, setInfoAlert }) {
+  const [query, setQuery] = useState(value || '');
   const [suggestions, setSuggestions] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [allLocations, setAllLocations] = useState([]);
+
+  useEffect(() => {
+    setQuery(value || '');
+  }, [value]);
 
   useEffect(() => {
     let active = true;
-    if (propsLocations && propsLocations.length) {
-      setAllLocations(propsLocations);
-      return;
-    }
     (async () => {
       const data = await getEvents({ location: 'all', pageSize: 200 });
       const uniq = extractLocations(data);
-      if (active) setAllLocations(uniq);
+      if (active) {
+        setAllLocations(uniq);
+        setSuggestions(uniq);
+      }
     })();
     return () => {
       active = false;
     };
-  }, [propsLocations]);
+  }, []);
 
-  useEffect(() => {
-    const list = allLocations.filter(loc =>
-      String(loc).toLowerCase().includes(query.toLowerCase())
+  const handleInputChanged = (event) => {
+    const value = event.target.value;
+    setQuery(value);
+
+    // Filter locations based on the query
+    const filteredLocations = allLocations.filter((location) =>
+      location.toLowerCase().includes(value.toLowerCase())
     );
-    setSuggestions(list);
-  }, [query, allLocations]);
+    setSuggestions(filteredLocations);
+
+    // Show info alert when no city matches
+    if (setInfoAlert) {
+      let infoText = '';
+      if (filteredLocations.length === 0) {
+        infoText = 'We can not find the city you are looking for. Please try another city';
+      }
+      setInfoAlert(infoText);
+    }
+  };
+
+  const handleItemClicked = (event) => {
+    const value = event.target.textContent;
+    setQuery(value);
+    setSuggestions([]);
+    if (onChange) onChange(value);
+    if (setInfoAlert) {
+      setInfoAlert('');
+    }
+  };
 
   return (
-    <div>
+    <div id="city-search">
       <input
         type="text"
-        role="textbox"
         className="city"
+        placeholder="Search for a city"
         value={query}
-        onFocus={() => setOpen(true)}
-        onChange={e => {
-          const val = e.target.value;
-          setQuery(val);
-          onChange?.(val || 'all');
-        }}
-        placeholder="Search city"
+        onChange={handleInputChanged}
+        role="textbox"
       />
-      {open && suggestions.length > 0 && (
-        <ul role="list" className="suggestions">
-          {suggestions.map((s, i) => (
-            <li key={`${s}-${i}`}>
-              <button
-                type="button"
-                onClick={() => {
-                  setQuery(s);
-                  onChange?.(s);
-                  setOpen(false);
-                }}
-              >
-                {s}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="suggestions">
+        {suggestions.map((suggestion) => (
+          <li key={suggestion}>
+            <button
+              type="button"
+              onClick={handleItemClicked}
+              role="button"
+            >
+              {suggestion}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
