@@ -2,82 +2,102 @@ import React, { useEffect, useState } from 'react';
 import { getEvents, extractLocations } from '../api';
 
 export default function CitySearch({ value, onChange, setInfoAlert }) {
-  const [query, setQuery] = useState(value || '');
+  const [query, setQuery] = useState(value || 'all');
   const [suggestions, setSuggestions] = useState([]);
-  const [allLocations, setAllLocations] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const cities = [
+    { id: 'all', name: 'See all cities', location: 'all' },
+    { id: 'berlin', name: 'Berlin, Germany', location: 'Berlin, Germany' },
+    { id: 'london', name: 'London, UK', location: 'London, UK' },
+    { id: 'munich', name: 'Munich, Germany', location: 'Munich, Germany' },
+    { id: 'paris', name: 'Paris, France', location: 'Paris, France' },
+    { id: 'amsterdam', name: 'Amsterdam, Netherlands', location: 'Amsterdam, Netherlands' }
+  ];
 
   useEffect(() => {
-    setQuery(value || '');
+    setQuery(value === 'all' ? 'See all cities' : value || 'See all cities');
   }, [value]);
 
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      const data = await getEvents({ location: 'all', pageSize: 200 });
-      const uniq = extractLocations(data);
-      if (active) {
-        setAllLocations(uniq);
-        setSuggestions(uniq);
-      }
-    })();
-    return () => {
-      active = false;
-    };
-  }, []);
-
   const handleInputChanged = (event) => {
-    const value = event.target.value;
-    setQuery(value);
+    const inputValue = event.target.value;
+    setQuery(inputValue);
 
-    // Filter locations based on the query
-    const filteredLocations = allLocations.filter((location) =>
-      location.toLowerCase().includes(value.toLowerCase())
-    );
-    setSuggestions(filteredLocations);
+    const filteredCities = cities.filter((city) => {
+      return city.name.toLowerCase().includes(inputValue.toLowerCase());
+    });
 
-    // Show info alert when no city matches
-    if (setInfoAlert) {
-      let infoText = '';
-      if (filteredLocations.length === 0) {
-        infoText = 'We can not find the city you are looking for. Please try another city';
-      }
-      setInfoAlert(infoText);
-    }
-  };
+    setSuggestions(filteredCities);
+    setShowSuggestions(true);
 
-  const handleItemClicked = (event) => {
-    const value = event.target.textContent;
-    setQuery(value);
-    setSuggestions([]);
-    if (onChange) onChange(value);
-    if (setInfoAlert) {
+    if (!filteredCities.length) {
+      setInfoAlert('We cannot find the city you are looking for. Please try another city.');
+    } else {
       setInfoAlert('');
     }
   };
 
+  const handleItemClicked = (suggestion) => {
+    setQuery(suggestion.name);
+    setSuggestions([]);
+    setShowSuggestions(false);
+    setInfoAlert('');
+    if (onChange) {
+      onChange(suggestion.location);
+    }
+  };
+
+  const handleFocus = () => {
+    setShowSuggestions(true);
+    setSuggestions(cities);
+  };
+
+  const handleBlur = () => {
+   
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
+  };
+
   return (
-    <div id="city-search">
-      <input
-        type="text"
-        className="city"
-        placeholder="Search for a city"
-        value={query}
-        onChange={handleInputChanged}
-        role="textbox"
-      />
-      <ul className="suggestions">
-        {suggestions.map((suggestion) => (
-          <li key={suggestion}>
-            <button
-              type="button"
-              onClick={handleItemClicked}
-              role="button"
-            >
-              {suggestion}
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="city-search-container">
+      <label htmlFor="city-search" className="form-label fw-bold text-secondary mb-2">
+        Select City
+      </label>
+      <div id="city-search" className="position-relative">
+        <input
+          type="text"
+          className="city form-control"
+          placeholder="Search for a city"
+          value={query}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onChange={handleInputChanged}
+          role="textbox"
+          aria-label="City search"
+          aria-expanded={showSuggestions}
+          aria-haspopup="listbox"
+        />
+        {showSuggestions && (
+          <ul 
+            className="suggestions list-unstyled"
+            role="listbox"
+          >
+            {suggestions.map((suggestion) => (
+              <li key={suggestion.id} className="suggestion-item">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => handleItemClicked(suggestion)}
+                  role="option"
+                >
+                  {suggestion.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

@@ -34,15 +34,19 @@ export default function NumberOfEvents({ value, onChange, setErrorAlert }) {
   };
 
   return (
-    <div>
+    <div className="number-of-events-container">
+      <label htmlFor="number-of-events" className="form-label fw-bold text-secondary mb-2">
+        Number of Events
+      </label>
       <input
         type="number"
         className="form-control"
         data-testid="number-of-events"
         id="number-of-events"
         min="1"
-        placeholder="Number of events"
-        aria-label="Number of events"
+        max="100"
+        placeholder="32"
+        aria-label="Number of events to display"
         value={internalValue}
         onChange={handleChange}
       />
