@@ -7,7 +7,7 @@ export default function EventList({ events }) {
     <div className="event-list-section">
       <div className="bg-white rounded p-4 shadow-sm">
         <h2 className="text-center mb-4 text-primary">Events</h2>
-        <div id="event-list" data-testid="event-list" role="list">
+        <ul id="event-list" data-testid="event-list" role="list">
           <Row className="g-4">
             {events ? events.map((event, index) => (
               <Col key={`${event.id || index}`} lg={12} md={12} sm={12} role="listitem">
@@ -19,7 +19,7 @@ export default function EventList({ events }) {
               </Col>
             )) : null}
           </Row>
-        </div>
+        </ul>
       </div>
     </div>
   );
