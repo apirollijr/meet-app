@@ -65,6 +65,7 @@ const App = () => {
                   </Col>
                   <Col md={4} sm={12}>
                     <NumberOfEvents 
+                      currentNOE={currentNOE}
                       setCurrentNOE={setCurrentNOE}
                       setErrorAlert={setErrorAlert}
                     />

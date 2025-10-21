@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CitySearch from '../src/components/CitySearch';
-import { getEvents } from '../src/api';
+import { getEvents, extractLocations } from '../src/api';
 
 // Mock the chart component to avoid ResizeObserver issues
 jest.mock('../src/components/CityEventsChart', () => {
@@ -16,14 +16,27 @@ jest.mock('../src/api');
 describe('<CitySearch /> component', () => {
   let CitySearchComponent;
   const mockSetInfoAlert = jest.fn();
+  const mockSetCurrentCity = jest.fn();
+  
+  // Mock data with the cities the tests expect
+  const mockEvents = [
+    { location: 'Berlin, Germany' },
+    { location: 'London, UK' },
+    { location: 'New York, NY, USA' }
+  ];
+  
+  const mockLocations = ['Berlin, Germany', 'London, UK', 'New York, NY, USA'];
 
   beforeEach(() => {
-    getEvents.mockResolvedValue([]);
+    getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(mockLocations);
     mockSetInfoAlert.mockClear();
+    mockSetCurrentCity.mockClear();
+    
     CitySearchComponent = render(
       <CitySearch 
-        value="all" 
-        onChange={jest.fn()} 
+        allLocations={mockLocations}
+        setCurrentCity={mockSetCurrentCity}
         setInfoAlert={mockSetInfoAlert}
       />
     );
