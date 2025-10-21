@@ -8,7 +8,7 @@ body {
 }
 
 .app-container {
-  background: rgba(255, 255, 255, 0.95);
+  background-color: #f8f9fa;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
@@ -16,6 +16,7 @@ body {
   margin: 20px;
   max-width: 1200px;
   width: 100%;
+  min-height: 100vh;
 }
 
 .controls-section {
@@ -30,6 +31,10 @@ body {
 }
 
 .event-list-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
   position: relative;
   z-index: 1;
@@ -53,7 +58,6 @@ body {
   padding: 25px;
 }
 
-/* Custom form controls */
 .form-control, .form-select {
   border-radius: 8px;
   border: 2px solid #e9ecef;
@@ -69,7 +73,6 @@ body {
   background: white;
 }
 
-/* City search styles */
 .city-search-container {
   position: relative;
   z-index: 1000;
@@ -127,13 +130,11 @@ body {
   border-radius: 0 0 8px 8px !important;
 }
 
-/* Background utility */
 .bg-light {
   background: rgba(255, 255, 255, 0.95) !important;
   backdrop-filter: blur(10px);
 }
 
-/* Typography adjustments */
 .form-label {
   font-size: 0.9rem;
   letter-spacing: 0.5px;
@@ -143,7 +144,133 @@ body {
   font-size: 0.8rem;
 }
 
-/* Responsive adjustments */
+.city-events-chart {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.chart-title {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  position: relative;
+}
+
+.chart-legend {
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+.chart-legend .badge {
+  font-size: 0.7rem;
+}
+
+.custom-tooltip {
+  border: 1px solid #ccc;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Charts container grid layout */
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Additional chart styling for better presentation */
+.charts-container > div {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Ensure charts are responsive within their containers */
+.recharts-responsive-container {
+  min-height: 400px;
+}
+
+/* App container improvements */
+.app-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Event list styling */
+.event-list-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Controls section styling */
+.controls-section .bg-light {
+  border: 1px solid #dee2e6;
+}
+
+/* Alert styling */
+.alerts-container .alert {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Remove bullets from all list items */
+li {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+
+/* More specific targeting */
+.event {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+
+/* Target Bootstrap card list items */
+.card-body li {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+
+/* Remove bullets from any list in the event list section */
+.event-list-section li {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+
+/* Remove default list styling completely */
+ul, ol {
+  list-style: none !important;
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Global list reset */
+* li {
+  list-style: none !important;
+  list-style-type: none !important;
+}
+
 @media (max-width: 768px) {
   body {
     align-items: flex-start;
@@ -157,5 +284,13 @@ body {
   
   .controls-section {
     padding: 20px 15px;
+  }
+  
+  .city-events-chart {
+    padding: 20px 15px;
+  }
+  
+  .chart-container {
+    height: 300px !important;
   }
 }

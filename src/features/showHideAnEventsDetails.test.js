@@ -1,103 +1,73 @@
-import { loadFeature, defineFeature } from 'jest-cucumber';
 import React from 'react';
-import { render, screen, within, waitFor } from '@testing-library/react';
+import { loadFeature, defineFeature } from 'jest-cucumber';
+import { render, within, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App.jsx';
+import App from '../App';
+
+// Mock both chart components
+jest.mock('../components/CityEventsChart', () => {
+  return function MockCityEventsChart() { return <div>Mock City Chart</div>; };
+});
+
+jest.mock('../components/EventGenresChart', () => {
+  return function MockEventGenresChart() { return <div>Mock Genres Chart</div>; };
+});
 
 const feature = loadFeature('./src/features/showHideAnEventsDetails.feature');
 
-const getAllEvents = () =>
-  (screen.queryAllByTestId('event').length
-    ? screen.getAllByTestId('event')
-    : Array.from(document.querySelectorAll('.event, .Event, .event-item')));
-
-const getFirstEventParts = () => {
-  const events = getAllEvents();
-  expect(events.length).toBeGreaterThan(0);
-
-  const first = events[0];
-  const utils = within(first);
-
-  const details =
-    utils.queryByTestId('event-details') ??
-    first.querySelector('.event-details, .Event-details');
-
-  const toggleBtn =
-    utils.queryByTestId('toggle-details') ??
-    utils.queryByRole('button', { name: /details|show|hide/i }) ??
-    first.querySelector('button');
-
-  return { first, details, toggleBtn };
-};
-
 defineFeature(feature, test => {
-  let user;
-
-  beforeEach(() => {
-    user = userEvent.setup();
-    render(<App />);
-  });
-
-  test('Events are collapsed by default', ({ given, when, then }) => {
-    given('the app is loaded', async () => {});
-
-    when('the list of events is displayed', async () => {
-      await waitFor(() => expect(getAllEvents().length).toBeGreaterThan(0));
-    });
-
-    then('each event’s details are hidden', async () => {
-      const cards = getAllEvents();
-      cards.forEach(card => {
-        const details =
-          within(card).queryByTestId('event-details') ??
-          card.querySelector('.event-details, .Event-details');
-        // Not rendered until open = hidden
-        expect(details).toBeNull();
-      });
-    });
-  });
+  const getAllEvents = () => screen.queryAllByTestId('event');
 
   test('User can expand an event to see its details', ({ given, when, then }) => {
-    given('the app is loaded', async () => {
-      await waitFor(() => expect(getAllEvents().length).toBeGreaterThan(0));
+    let AppComponent;
+    let button;
+    
+    given('the user is viewing the main page with events', async () => {
+      AppComponent = render(<App />);
+      await waitFor(() => {
+        const events = getAllEvents();
+        expect(events[0]).toBeTruthy();
+      });
     });
 
-    when('the user toggles the first event’s details', async () => {
-      const { toggleBtn } = getFirstEventParts();
-      expect(toggleBtn).toBeTruthy();
-      await user.click(toggleBtn);
+    when(/^the user clicks on the "(.*)" button for an event$/, async (arg0) => {
+      const user = userEvent.setup();
+      button = screen.getAllByText('show details')[0];
+      await user.click(button);
     });
 
-    then('the first event’s details are visible', async () => {
-      const { first } = getFirstEventParts();
-      const details =
-        within(first).queryByTestId('event-details') ??
-        first.querySelector('.event-details, .Event-details');
-      expect(details).not.toBeNull(); // presence = visible in this component
+    then('the event details should be visible', () => {
+      const eventDetails = screen.getByTestId('event-details');
+      expect(eventDetails).toBeInTheDocument();
     });
   });
 
   test('User can collapse an event to hide its details', ({ given, when, then }) => {
-    given('the app is loaded', async () => {
-      await waitFor(() => expect(getAllEvents().length).toBeGreaterThan(0));
+    let AppComponent;
+    let hideButton;
+    
+    given('the user is viewing an event with its details expanded', async () => {
+      AppComponent = render(<App />);
+      await waitFor(() => {
+        const events = getAllEvents();
+        expect(events[0]).toBeTruthy();
+      });
+      
+      const user = userEvent.setup();
+      const showButton = screen.getAllByText('show details')[0];
+      await user.click(showButton);
+      expect(screen.getByTestId('event-details')).toBeInTheDocument();
     });
 
-    given('the first event’s details are visible', async () => {
-      const { toggleBtn } = getFirstEventParts();
-      await user.click(toggleBtn); // open
+    when(/^the user clicks on the "(.*)" button$/, async (arg0) => {
+      const user = userEvent.setup();
+      hideButton = screen.getByText('hide details');
+      await user.click(hideButton);
     });
 
-    when('the user toggles the first event’s details', async () => {
-      const { toggleBtn } = getFirstEventParts();
-      await user.click(toggleBtn); // close
-    });
-
-    then('the first event’s details are hidden', async () => {
-      const { first } = getFirstEventParts();
-      const details =
-        within(first).queryByTestId('event-details') ??
-        first.querySelector('.event-details, .Event-details');
-      expect(details).toBeNull(); // not rendered when closed
+    then('the event details should be hidden', () => {
+      const eventDetails = screen.queryByTestId('event-details');
+      expect(eventDetails).not.toBeInTheDocument();
     });
   });
 });

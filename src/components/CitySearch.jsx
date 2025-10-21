@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { getEvents, extractLocations } from '../api';
+import React, { useState, useEffect } from 'react';
 
 export default function CitySearch({ value, onChange, setInfoAlert }) {
   const [query, setQuery] = useState(value || 'all');
@@ -30,10 +29,12 @@ export default function CitySearch({ value, onChange, setInfoAlert }) {
     setSuggestions(filteredCities);
     setShowSuggestions(true);
 
-    if (!filteredCities.length) {
-      setInfoAlert('We cannot find the city you are looking for. Please try another city.');
-    } else {
-      setInfoAlert('');
+    if (setInfoAlert) {
+      if (!filteredCities.length) {
+        setInfoAlert('We cannot find the city you are looking for. Please try another city.');
+      } else {
+        setInfoAlert('');
+      }
     }
   };
 
@@ -41,7 +42,9 @@ export default function CitySearch({ value, onChange, setInfoAlert }) {
     setQuery(suggestion.name);
     setSuggestions([]);
     setShowSuggestions(false);
-    setInfoAlert('');
+    if (setInfoAlert) {
+      setInfoAlert('');
+    }
     if (onChange) {
       onChange(suggestion.location);
     }
@@ -53,7 +56,6 @@ export default function CitySearch({ value, onChange, setInfoAlert }) {
   };
 
   const handleBlur = () => {
-   
     setTimeout(() => {
       setShowSuggestions(false);
     }, 200);
@@ -81,7 +83,7 @@ export default function CitySearch({ value, onChange, setInfoAlert }) {
         {showSuggestions && (
           <ul 
             className="suggestions list-unstyled"
-            role="listbox"
+            role="list"
           >
             {suggestions.map((suggestion) => (
               <li key={suggestion.id} className="suggestion-item">
@@ -89,7 +91,6 @@ export default function CitySearch({ value, onChange, setInfoAlert }) {
                   type="button"
                   className="btn"
                   onClick={() => handleItemClicked(suggestion)}
-                  role="option"
                 >
                   {suggestion.name}
                 </button>

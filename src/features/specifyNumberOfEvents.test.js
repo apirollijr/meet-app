@@ -1,66 +1,64 @@
-import { loadFeature, defineFeature } from 'jest-cucumber';
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { loadFeature, defineFeature } from 'jest-cucumber';
+import { render, within, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App.jsx';
+import App from '../App';
+
+// Mock both chart components
+jest.mock('../components/CityEventsChart', () => {
+  return function MockCityEventsChart() { return <div>Mock City Chart</div>; };
+});
+
+jest.mock('../components/EventGenresChart', () => {
+  return function MockEventGenresChart() { return <div>Mock Genres Chart</div>; };
+});
 
 const feature = loadFeature('./src/features/specifyNumberOfEvents.feature');
 
-const EVENT_SEL = '.event, .Event, .event-item, [data-testid="event"]';
-
-const getEventCards = () =>
-  (screen.queryAllByTestId('event').length
-    ? screen.getAllByTestId('event')
-    : Array.from(document.querySelectorAll(EVENT_SEL)));
-
-const findCountInput = () =>
-  screen.queryByTestId('number-of-events') ||
-  screen.queryByRole('spinbutton') ||
-  document.querySelector('#number-of-events, input[type="number"]');
-
 defineFeature(feature, test => {
-  let user;
-
-  beforeEach(() => {
-    user = userEvent.setup();
-    render(<App />);
-  });
-
   test('A default number of events is shown when the user has not specified a number', ({ given, when, then }) => {
-    given('the app is loaded', async () => {});
-
-    when('the list of events is displayed', async () => {
-      await waitFor(() => {
-        expect(getEventCards().length).toBeGreaterThan(0);
-      });
+    let AppComponent;
+    given('the user is on the main page', () => {
+      AppComponent = render(<App />);
     });
 
-    then('the app shows the default number of events', async () => {
-      const DEFAULT = Number(process.env.DEFAULT_EVENTS_COUNT || 32);
+    when('the user has not specified a number of events to display', () => {
+      // No action needed - default state
+    });
+
+    then(/^(\d+) events should be displayed by default$/, async (arg0) => {
       await waitFor(() => {
-        expect(getEventCards().length).toBeLessThanOrEqual(DEFAULT);
-      });
+        const EventListDOM = AppComponent.container.querySelector('[data-testid="event-list"]');
+        const allRenderedEvents = within(EventListDOM).queryAllByTestId('event');
+        expect(allRenderedEvents).toHaveLength(parseInt(arg0));
+      }, { timeout: 3000 });
     });
   });
 
   test('User changes the number of events shown', ({ given, when, then }) => {
-    given('the app is loaded', async () => {
-      await waitFor(() => expect(findCountInput()).toBeTruthy());
+    let AppComponent;
+    let input;
+    
+    given('the user is viewing the events list', () => {
+      AppComponent = render(<App />);
     });
 
-    when(/^the user sets the number of events to "(\d+)"$/, async count => {
-      const input = findCountInput();
-      expect(input).toBeTruthy();
-      await user.clear(input);
-      await user.type(input, String(count));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-      input.dispatchEvent(new Event('blur', { bubbles: true }));
-    });
-
-    then(/^up to "(\d+)" events are displayed$/, async count => {
-      const expected = Number(count);
+    when('the user changes the number in the "Number of Events" input', async () => {
       await waitFor(() => {
-        expect(getEventCards().length).toBeLessThanOrEqual(expected);
+        input = AppComponent.container.querySelector('[data-testid="number-of-events"]');
+        expect(input).toBeInTheDocument();
+      });
+      
+      const user = userEvent.setup();
+      await user.clear(input);
+      await user.type(input, '10');
+    });
+
+    then('the events list should update to show that many events', async () => {
+      await waitFor(() => {
+        const EventListDOM = AppComponent.container.querySelector('[data-testid="event-list"]');
+        const allRenderedEvents = within(EventListDOM).queryAllByTestId('event');
+        expect(allRenderedEvents).toHaveLength(10);
       }, { timeout: 3000 });
     });
   });

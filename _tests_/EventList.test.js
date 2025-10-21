@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { render } from '@testing-library/react';
-import { getEvents } from '../src/api';
 import EventList from '../src/components/EventList';
+import { getEvents } from '../src/api';
 
 
 describe('<EventList /> component', () => {
@@ -15,10 +14,11 @@ describe('<EventList /> component', () => {
    expect(EventListComponent.queryByRole("list")).toBeInTheDocument();
  });
 
-test('renders correct number of events', async () => {
+ test('renders correct number of events', async () => {
     const allEvents = await getEvents(); 
     EventListComponent.rerender(<EventList events={allEvents} />);
-expect(EventListComponent.getAllByRole("listitem")).toHaveLength(allEvents.length);
+    // Count by data-testid instead of role to avoid Bootstrap wrapper duplication
+    expect(EventListComponent.getAllByTestId("event")).toHaveLength(allEvents.length);
   });
 });
 
